@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>水浒烤肉</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+
+    <style>
+        body {
+            min-height: 75rem;
+            padding-top: 4.5rem;
+        }
+
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .my-img {
+            height: 8rem;
+            width: 10rem;
+            display: block;
+            padding: 1px;
+            border: solid 1px #5a6268;
+        }
+
+        .dish-st {
+            height: 8rem;
+            padding: 0 1rem;
+            display: inline-block;
+            vertical-align: top
+        }
+    </style>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+<div id="all-space"></div>
+<template id="vue-space">
+    <div>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <a class="navbar-brand" href="#">{{uname == null ? '登录':uname}}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">点菜</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">购物车</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">订单</a>
+                    </li>
+                </ul>
+                <form class="form-inline mt-2 mt-md-0">
+                    <input class="form-control mr-sm-2" type="text" placeholder="搜索" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
+                </form>
+            </div>
+        </nav>
+
+        <main role="main" class="container">
+            <div class="jumbotron">
+                <h1>本店推荐</h1>
+                <ul class="list-group">
+                    <li class="list-group-item" v-for="item in dishList">
+                        <a href="" @click="dishDetail" style="display: inline-block; vertical-align: top">
+                            <img class="my-img" :src="item.imgPath">
+                        </a>
+                        <div class="bg-light dish-st">
+                            <a :class="'h3'">{{item.dish_name}}</a>
+                            <span>单价: {{}}</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </main>
+    </div>
+</template>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="js/jquery-3.5.1.js"></script>
+<script src="js/bootstrap.bundle.js"></script>
+<script>
+    var app = new Vue({
+        el: '#all-space',
+        template: '#vue-space',
+        data: {
+            uname: null,
+            dishList: [
+                {imgPath: '/img/img1.jpg', dish_name:'dog'},
+                {imgPath: '/img/img2.jpg', dish_name:'cat'},
+                {imgPath: '/img/img3.jpg', dish_name:'dog'},
+                {imgPath: '/img/img4.jpg', dish_name:'cat'},
+                {imgPath: '/img/img5.jpg', dish_name:'cat'},
+                {imgPath: '/img/img6.jpg', dish_name:'cat'},
+                {imgPath: '/img/img7.jpg', dish_name:'cat'}
+            ]
+        },
+        created: function () {
+            this.uname = sessionStorage.getItem('uname');
+        },
+        methods: {
+            dishDetail: function (){
+
+            }
+        }
+    });
+</script>
+</body>
+</html>

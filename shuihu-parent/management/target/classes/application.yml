@@ -1,0 +1,11 @@
+server:
+  port: 8008
+
+eureka:
+  instance:
+    hostname: shuihu-registerCenter
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+    service-url:
+      defaultZone: http://localhost:8008/eureka
