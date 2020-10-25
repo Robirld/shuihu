@@ -4,8 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.shuihu</groupId>
-        <version>1.0-SNAPSHOT</version>
         <artifactId>shuihu-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
     </parent>
     <groupId>com.shuihu</groupId>
     <artifactId>boss</artifactId>
