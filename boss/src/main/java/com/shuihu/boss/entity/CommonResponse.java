@@ -12,5 +12,5 @@ import java.io.Serializable;
 public class CommonResponse<T> implements Serializable {
     private Integer code;
     private String msg;
-    private T date;
+    private T data;
 }

@@ -19,9 +19,12 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/shuihu?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
     username: root
-    password: 1993722libo
+    password: 12345687
+#    password: 1993722libo
   resources:
     static-locations: classpath:/templates/
+    chain:
+      cache: false
 
 mybatis:
   mapper-locations: classpath:/mapper/**.xml

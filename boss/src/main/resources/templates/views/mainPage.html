@@ -8,10 +8,10 @@
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/shuihu.css" rel="stylesheet">
 
     <style>
         body {
-            min-height: 75rem;
             padding-top: 4.5rem;
         }
 
@@ -40,9 +40,10 @@
 
         .dish-st {
             height: 8rem;
-            padding: 0 1rem;
+            padding: 0.5rem 0.8rem;
             display: inline-block;
-            vertical-align: top
+            vertical-align: top;
+            width: 51rem;
         }
     </style>
     <script src="js/vue.js"></script>
@@ -67,6 +68,13 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">订单</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <svg width="1.3rem" height="1.3rem" viewBox="0 0 16 16" class="bi bi-cart" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                            </svg>
+                        </a>
+                    </li>
                 </ul>
                 <form class="form-inline mt-2 mt-md-0">
                     <input class="form-control mr-sm-2" type="text" placeholder="搜索" aria-label="Search">
@@ -78,22 +86,41 @@
         <main role="main" class="container">
             <div class="jumbotron">
                 <h1>本店推荐</h1>
-                <ul class="list-group">
-                    <li class="list-group-item" v-for="item in dishList">
-                        <a href="" @click="dishDetail" style="display: inline-block; vertical-align: top">
-                            <img class="my-img" :src="item.imgPath">
-                        </a>
-                        <div class="bg-light dish-st">
-                            <a :class="'h3'">{{item.dish_name}}</a>
-                            <span>单价: {{}}</span>
-                        </div>
-                    </li>
-                </ul>
+                <div style="height: 36rem;overflow: auto" @scroll="scrollBottom($event)">
+                    <ul class="list-group">
+                        <li class="list-group-item" v-for="item in dishList">
+                            <a href="" @click="dishDetail" style="display: inline-block; vertical-align: top">
+                                <img class="my-img" :src="item.img_path">
+                            </a>
+                            <div class="bg-light dish-st">
+                                <div class="inner-panel">
+                                    <a href="" class="h3">{{item.dish_name}}</a>
+                                    <span class="text-delete">原价: {{item.origin_price}}元/{{item.unit}}</span>
+                                    <span class="text-success">现价: {{item.current_price}}元/{{item.unit}}</span>
+                                    <p class="text-sm text-black-50">{{item.description}}</p>
+                                </div>
+                                <div class="inner-panel">
+                                    <label for="quantity" class="text-danger">今日剩余：</label>
+                                    <span id="quantity" class="text-underline">{{item.quantity}}</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="center-block">
+                        <span class="text-black-50">{{currentIndex > maxIndex ? '>>>没有更多了<<<' : '>>>正在加载<<<'}}</span>
+                        <span class="text-black-50" v-if="currentIndex <= maxIndex">
+                        <svg width="1.5rem" height="1.5rem" viewBox="0 0 16 16" class="bi bi-chevron-double-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                            <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                    </span>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
 </template>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="js/axios.min.js"></script>
 <script src="js/jquery-3.5.1.js"></script>
 <script src="js/bootstrap.bundle.js"></script>
 <script>
@@ -102,22 +129,33 @@
         template: '#vue-space',
         data: {
             uname: null,
-            dishList: [
-                {imgPath: '/img/img1.jpg', dish_name:'dog'},
-                {imgPath: '/img/img2.jpg', dish_name:'cat'},
-                {imgPath: '/img/img3.jpg', dish_name:'dog'},
-                {imgPath: '/img/img4.jpg', dish_name:'cat'},
-                {imgPath: '/img/img5.jpg', dish_name:'cat'},
-                {imgPath: '/img/img6.jpg', dish_name:'cat'},
-                {imgPath: '/img/img7.jpg', dish_name:'cat'}
-            ]
+            dishList: [],
+            currentIndex: 0,
+            maxIndex: 0
         },
         created: function () {
-            this.uname = sessionStorage.getItem('uname');
+            this.loadDishes();
         },
         methods: {
             dishDetail: function (){
 
+            },
+            loadDishes: function (){
+                var self = this;
+                this.uname = sessionStorage.getItem('uname');
+                axios.get("/dishList").then(response => {
+                    var result = response.data;
+                    if (result.code == 200){
+                        self.dishList = result.data;
+                    }else {
+                        alert(result.msg);
+                    }
+                }).catch(e => {
+                    console.log(e);
+                })
+            },
+            scrollBottom: function (event) {
+                console.log(event.target.scrollHeight);
             }
         }
     });

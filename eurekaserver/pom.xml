@@ -4,11 +4,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.shuihu</groupId>
-  <artifactId>management</artifactId>
+  <artifactId>eurekaserver</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>management</name>
+  <name>eurekaserver</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
@@ -42,7 +42,7 @@
   </dependencies>
 
   <build>
-    <finalName>management</finalName>
+    <finalName>eurekaserver</finalName>
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>
