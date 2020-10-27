@@ -24,18 +24,18 @@
             }
         }
     </style>
-    <script src="../js/vue.js"></script>
-    <script src="../js/axios.min.js"></script>
+    <script src="/static/js/vue.js"></script>
+    <script src="/static/js/axios.min.js"></script>
     <!-- Bootstrap core CSS -->
-    <link href="../css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link href="../css/signin.css" rel="stylesheet">
+    <link href="/static/css/signin.css" rel="stylesheet">
 </head>
 <body class="text-center">
 <div id="login-form"></div>
 <template id="login-tmpl">
     <form class="form-signin">
-        <img class="mb-4" src="/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+        <img class="mb-4" src="/static/brand/bootstrap-solid.svg" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">水浒烤肉</h1>
         <label for="username" class="sr-only">用户名</label>
         <input type="text" id="username" ref="username" v-model="username" class="form-control" placeholder="用户名">

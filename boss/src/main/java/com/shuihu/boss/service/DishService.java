@@ -1,8 +1,7 @@
 package com.shuihu.boss.service;
 
 import com.shuihu.boss.entity.Dish;
-
-import java.util.List;
+import com.shuihu.boss.entity.Page;
 
 /**
  * @Author user
@@ -10,5 +9,5 @@ import java.util.List;
  * @Version 1.0
  */
 public interface DishService {
-    List<Dish> getDishes(Dish dish);
+    Page<Dish> getDishes(Integer category, Page<Dish> page);
 }

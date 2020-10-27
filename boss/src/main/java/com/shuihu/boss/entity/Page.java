@@ -5,7 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author user
@@ -16,9 +18,23 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Page<T> implements Serializable {
-    private Integer start;
-    private Integer count;
-    private Integer totalNum;
-    private Integer end;
-    private List<T> entities;
+
+    // 当前页码
+    private Integer pageNo = 1;
+
+    // 每页数量
+    private Integer pageSize = 10;
+
+    // 记录总数
+    private Integer totalRecord;
+
+    // 总页数
+    private Integer totalPage;
+
+    // 数据模型
+    private List<T> content;
+
+    // 其它参数
+    private Map<String, Object> params = new HashMap<>();
+
 }

@@ -24,9 +24,9 @@ public class LoginController {
     String loginPage(HttpServletRequest request){
         HttpSession session = request.getSession();
         if (session.getAttribute("user") != null){
-            return "views/mainPage";
+            return "mainPage";
         }
-        return "views/login";
+        return "login";
     }
 
     @PostMapping("/login")
@@ -43,10 +43,10 @@ public class LoginController {
     }
 
     @GetMapping("/home")
-    String mainPage(){ return "views/mainPage"; }
+    String mainPage(){ return "mainPage"; }
 
     @GetMapping("/register")
-    String registerPage(){ return "views/register"; }
+    String registerPage(){ return "register"; }
 
     @PostMapping("/register")
     @ResponseBody
