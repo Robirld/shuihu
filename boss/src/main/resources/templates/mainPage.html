@@ -45,6 +45,13 @@
             vertical-align: top;
             width: 51rem;
         }
+        
+        @media (max-width: 420px) {
+            .dish-st {
+                width: 17rem;
+                height: auto;
+            }
+        }
     </style>
     <script src="/static/js/vue.js"></script>
 </head>
@@ -86,7 +93,7 @@
         <main role="main" class="container">
             <div class="jumbotron">
                 <h1>本店推荐</h1>
-                <div style="height: 36rem;overflow: auto" @scroll="scrollBottom($event)">
+                <div style="height: 29rem;overflow: auto" @scroll="scrollBottom($event)">
                     <ul class="list-group">
                         <li class="list-group-item" v-for="item in dishList">
                             <a href="" @click="dishDetail" style="display: inline-block; vertical-align: top">
@@ -108,9 +115,9 @@
                     </ul>
                     <div class="center-block">
                         <span class="text-black-50">
-                            >>>{{currentPageNo >= maxPageNum ? '没有更多了' : '正在加载'}}<<<
+                            >>>{{currentPageNo > maxPageNum ? '没有更多了' : '正在加载'}}<<<
                         </span>
-                        <span class="text-black-50" v-if="currentPageNo < maxPageNum">
+                        <span class="text-black-50" v-if="currentPageNo <= maxPageNum">
                         <svg width="1.5rem" height="1.5rem" viewBox="0 0 16 16" class="bi bi-chevron-double-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
                             <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
@@ -159,6 +166,7 @@
                         self.dishList.push(...result.data.content);
                         self.currentPageNo += 1;
                         self.maxPageNum = result.data.totalPage;
+                        console.log(self.currentPageNo+","+self.maxPageNum)
                     }else {
                         alert(result.msg);
                     }
@@ -169,7 +177,7 @@
             scrollBottom: function (event) {
                 let element = event.target;
                 let scrHei = element.scrollHeight - element.clientHeight;
-                if (scrHei - element.scrollTop < 30 && this.currentPageNo < this.maxPageNum) {
+                if (scrHei - element.scrollTop <= 1 && this.currentPageNo <= this.maxPageNum) {
                     this.loadDishes();
                 }
             }

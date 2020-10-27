@@ -93,7 +93,7 @@ public class MySqlIntercepor implements Interceptor {
 
     private String generatePageSql(String sql, Page<?> page) {
         StringBuilder sb = new StringBuilder(sql);
-        sb.append(" limit ").append((page.getPageNo()-1) * page.getPageSize()+1).append(", ").append(page.getPageSize());
+        sb.append(" limit ").append((page.getPageNo()-1) * page.getPageSize()).append(", ").append(page.getPageSize());
         return sb.toString();
     }
 

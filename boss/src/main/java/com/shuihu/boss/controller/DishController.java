@@ -27,7 +27,7 @@ public class DishController {
     CommonResponse<Page<Dish>> dishList(@RequestParam("category") Integer category, Page<Dish> page){
         try {
             Page<Dish> dishPage = dishService.getDishes(category, page);
-            if (dishPage == null || dishPage.getContent() == null || dishPage.getContent().isEmpty()){
+            if (dishPage == null || dishPage.getContent() == null){
                 return new CommonResponse<>(500, "未找到菜单", null);
             }
             return new CommonResponse<>(200, "success", dishPage);
