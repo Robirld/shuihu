@@ -2,11 +2,10 @@ package com.shuihu.boss.service.impl;
 
 import com.shuihu.boss.dao.DishDao;
 import com.shuihu.boss.entity.Dish;
+import com.shuihu.boss.entity.Page;
 import com.shuihu.boss.service.DishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @Author user
@@ -18,7 +17,8 @@ public class DishServiceImpl implements DishService {
     @Autowired
     private DishDao dishDao;
     @Override
-    public List<Dish> getDishes(Dish dish) {
-        return dishDao.getDishes(dish);
+    public Page<Dish> getDishes(Integer category, Page<Dish> page) {
+        page.setContent(dishDao.getDishes(category, page));
+        return page;
     }
 }

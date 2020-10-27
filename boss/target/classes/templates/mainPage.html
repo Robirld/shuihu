@@ -7,8 +7,8 @@
     <title>水浒烤肉</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <link href="css/shuihu.css" rel="stylesheet">
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/shuihu.css" rel="stylesheet">
 
     <style>
         body {
@@ -46,7 +46,7 @@
             width: 51rem;
         }
     </style>
-    <script src="js/vue.js"></script>
+    <script src="/static/js/vue.js"></script>
 </head>
 <body>
 <div id="all-space"></div>
@@ -107,8 +107,10 @@
                         </li>
                     </ul>
                     <div class="center-block">
-                        <span class="text-black-50">{{currentIndex > maxIndex ? '>>>没有更多了<<<' : '>>>正在加载<<<'}}</span>
-                        <span class="text-black-50" v-if="currentIndex <= maxIndex">
+                        <span class="text-black-50">
+                            >>>{{currentPageNo >= maxPageNum ? '没有更多了' : '正在加载'}}<<<
+                        </span>
+                        <span class="text-black-50" v-if="currentPageNo < maxPageNum">
                         <svg width="1.5rem" height="1.5rem" viewBox="0 0 16 16" class="bi bi-chevron-double-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
                             <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
@@ -120,9 +122,10 @@
         </main>
     </div>
 </template>
-<script src="js/axios.min.js"></script>
-<script src="js/jquery-3.5.1.js"></script>
-<script src="js/bootstrap.bundle.js"></script>
+<script src="/static/js/qs.min.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script src="/static/js/jquery-3.5.1.js"></script>
+<script src="/static/js/bootstrap.bundle.js"></script>
 <script>
     var app = new Vue({
         el: '#all-space',
@@ -130,8 +133,9 @@
         data: {
             uname: null,
             dishList: [],
-            currentIndex: 0,
-            maxIndex: 0
+            currentPageNo: 1,
+            maxPageNum: 0,
+            category: 0
         },
         created: function () {
             this.loadDishes();
@@ -143,10 +147,18 @@
             loadDishes: function (){
                 var self = this;
                 this.uname = sessionStorage.getItem('uname');
-                axios.get("/dishList").then(response => {
+                var formData = new FormData();
+                formData.append("pageNo", self.currentPageNo);
+                formData.append("pageSize", 6);
+                formData.append("category", self.category);
+                axios.post("/dishList", formData, {
+                    headers: {'Content-Type': 'multipart/form-data'}
+                }).then(response => {
                     var result = response.data;
                     if (result.code == 200){
-                        self.dishList = result.data;
+                        self.dishList.push(...result.data.content);
+                        self.currentPageNo += 1;
+                        self.maxPageNum = result.data.totalPage;
                     }else {
                         alert(result.msg);
                     }
@@ -155,7 +167,11 @@
                 })
             },
             scrollBottom: function (event) {
-                console.log(event.target.scrollHeight);
+                let element = event.target;
+                let scrHei = element.scrollHeight - element.clientHeight;
+                if (scrHei - element.scrollTop < 30 && this.currentPageNo < this.maxPageNum) {
+                    this.loadDishes();
+                }
             }
         }
     });

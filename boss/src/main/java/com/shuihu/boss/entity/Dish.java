@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @Author user
@@ -27,4 +28,5 @@ public class Dish implements Serializable {
     private String img_path;
     private String description;
     private Boolean deleted;
+    private Date create_at;
 }
