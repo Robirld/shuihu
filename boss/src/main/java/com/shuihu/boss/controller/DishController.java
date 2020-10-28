@@ -36,4 +36,9 @@ public class DishController {
             return new CommonResponse<>(500, "获取菜单异常", null);
         }
     }
+
+    @GetMapping("dishList")
+    String dishesPage(){
+        return "dishList";
+    }
 }
