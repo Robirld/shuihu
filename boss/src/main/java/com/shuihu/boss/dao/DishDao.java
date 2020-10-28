@@ -14,5 +14,5 @@ import java.util.List;
  */
 @Component
 public interface DishDao {
-    List<Dish> getDishes(@Param("category") Integer category, @Param("page") Page page);
+    List<Dish> getDishes(@Param("min")Double min, @Param("max")Double max, @Param("category") Integer category, @Param("page") Page page);
 }

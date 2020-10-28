@@ -18,7 +18,7 @@ public class DishServiceImpl implements DishService {
     private DishDao dishDao;
     @Override
     public Page<Dish> getDishes(Integer category, Page<Dish> page) {
-        page.setContent(dishDao.getDishes(category, page));
+        page.setContent(dishDao.getDishes(0D, 110D, category, page));
         return page;
     }
 }

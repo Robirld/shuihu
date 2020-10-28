@@ -1,12 +1,9 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <meta charset="UTF-8">
     <title>水浒烤肉</title>
 
-    <!-- Bootstrap core CSS -->
     <link href="/static/css/bootstrap.css" rel="stylesheet">
     <link href="/static/css/shuihu.css" rel="stylesheet">
 
@@ -29,35 +26,17 @@
                 font-size: 3.5rem;
             }
         }
-
-        .my-img {
-            height: 8rem;
-            width: 10rem;
-            display: block;
-            padding: 1px;
-            border: solid 1px #5a6268;
-        }
-
-        .dish-st {
-            height: 8rem;
-            padding: 0.5rem 0.8rem;
-            display: inline-block;
-            vertical-align: top;
-            width: 51rem;
-        }
-        
-        @media (max-width: 420px) {
-            .dish-st {
-                width: 17rem;
-                height: auto;
-            }
-        }
     </style>
+
     <script src="/static/js/vue.js"></script>
+    <script src="/static/js/qs.min.js"></script>
+    <script src="/static/js/axios.min.js"></script>
+    <script src="/static/js/jquery-3.5.1.js"></script>
+    <script src="/static/js/bootstrap.bundle.js"></script>
 </head>
 <body>
 <div id="all-space"></div>
-<template id="vue-space">
+<template id="dishes-template">
     <div>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
             <a class="navbar-brand" href="#">
@@ -71,7 +50,7 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/dishList">点菜</a>
+                        <a class="nav-link" href="#">点菜</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">订单</a>
@@ -93,51 +72,53 @@
 
         <main role="main" class="container">
             <div class="jumbotron">
-                <h1>本店推荐</h1>
-                <div style="height: 29rem;overflow: auto" @scroll="scrollBottom($event)">
-                    <ul class="list-group">
-                        <li class="list-group-item" v-for="item in dishList">
-                            <a href="" @click="dishDetail" style="display: inline-block; vertical-align: top">
-                                <img class="my-img" :src="item.img_path">
-                            </a>
-                            <div class="bg-light dish-st">
-                                <div class="inner-panel">
-                                    <a href="" class="h3">{{item.dish_name}}</a>
-                                    <span class="text-delete">原价: {{item.origin_price}}元/{{item.unit}}</span>
-                                    <span class="text-success">现价: {{item.current_price}}元/{{item.unit}}</span>
-                                    <p class="text-sm text-black-50">{{item.description}}</p>
-                                </div>
-                                <div class="inner-panel">
-                                    <label for="quantity" class="text-danger">今日剩余：</label>
-                                    <span id="quantity" class="text-underline">{{item.quantity}}</span>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="center-block">
-                        <span class="text-black-50">
-                            >>>{{currentPageNo > maxPageNum ? '没有更多了' : '正在加载'}}<<<
-                        </span>
-                        <span class="text-black-50" v-if="currentPageNo <= maxPageNum">
-                        <svg width="1.5rem" height="1.5rem" viewBox="0 0 16 16" class="bi bi-chevron-double-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                            <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                        </svg>
-                    </span>
-                    </div>
+                <h5>菜单列表</h5>
+                <div style="margin: 0.5rem 1rem">
+                    <a class="text-black-50 btn-inline" :class="category == 0 ? 'selected' : ''" @click="getDishesByCategory(0)">全部</a>
+                    <a class="text-black-50 btn-inline" :class="category == 1 ? 'selected' : ''" @click="getDishesByCategory(1)">类别1</a>
+                    <a class="text-black-50 btn-inline" :class="category == 2 ? 'selected' : ''" @click="getDishesByCategory(2)">类别2</a>
+                    <a class="text-black-50 btn-inline" :class="category == 3 ? 'selected' : ''" @click="getDishesByCategory(3)">类别3</a>
+                </div>
+                <table class="table text-center">
+                    <tr>
+                        <th>实物视图</th>
+                        <th>名称</th>
+                        <th>分类</th>
+                        <th>价格</th>
+                        <th>单位</th>
+                        <th>今日剩余</th>
+                        <th>下单</th>
+                    </tr>
+                    <tr v-for="item in dishList">
+                        <td><img class="img-sm" :src="item.img_path"></td>
+                        <td>{{item.dish_name}}</td>
+                        <td>
+                            <span v-if="item.category == 1">类别1</span>
+                            <span v-if="item.category == 2">类别2</span>
+                            <span v-if="item.category == 3">类别3</span>
+                        </td>
+                        <td>{{item.current_price}}</td>
+                        <td>元/{{item.unit}}</td>
+                        <td>{{item.quantity}}</td>
+                        <td>
+                            <input type="number" value="0">
+                            <a class="btn btn-sm btn-link" @click="addOrder($event, item.id)">添加</a>
+                        </td>
+                    </tr>
+                </table>
+                <div v-if="maxPageNum > 1" style="margin-left: 1rem">
+                    <a class="btn btn-sm btn-light" :class="currentPageNo == 1 ? 'disabled' : ''" @click="beforePage">上一页</a>
+                    {{currentPageNo}}
+                    <a class="btn btn-sm btn-light" :class="currentPageNo == maxPageNum ? 'disabled' : ''" @click="nextPage">下一页</a>
                 </div>
             </div>
         </main>
     </div>
 </template>
-<script src="/static/js/qs.min.js"></script>
-<script src="/static/js/axios.min.js"></script>
-<script src="/static/js/jquery-3.5.1.js"></script>
-<script src="/static/js/bootstrap.bundle.js"></script>
 <script>
     var app = new Vue({
         el: '#all-space',
-        template: '#vue-space',
+        template: '#dishes-template',
         data: {
             uname: null,
             dishList: [],
@@ -149,9 +130,6 @@
             this.loadDishes();
         },
         methods: {
-            dishDetail: function (){
-
-            },
             loadDishes: function (){
                 var self = this;
                 this.uname = sessionStorage.getItem('uname');
@@ -164,8 +142,7 @@
                 }).then(response => {
                     var result = response.data;
                     if (result.code == 200){
-                        self.dishList.push(...result.data.content);
-                        self.currentPageNo += 1;
+                        self.dishList = result.data.content;
                         self.maxPageNum = result.data.totalPage;
                         console.log(self.currentPageNo+","+self.maxPageNum)
                     }else {
@@ -181,6 +158,23 @@
                 if (scrHei - element.scrollTop <= 1 && this.currentPageNo <= this.maxPageNum) {
                     this.loadDishes();
                 }
+            },
+            getDishesByCategory: function (cate) {
+                this.currentPageNo = 1;
+                this.maxPageNum = 0;
+                this.category = cate;
+                this.loadDishes();
+            },
+            addOrder: function (event, dishId) {
+
+            },
+            beforePage: function () {
+                this.currentPageNo -= 1;
+                this.loadDishes();
+            },
+            nextPage: function () {
+                this.currentPageNo += 1;
+                this.loadDishes();
             }
         }
     });

@@ -8,6 +8,9 @@
         <if test="category != null and category != 0">
             and category = #{category}
         </if>
+        <if test="min != null and max != null and max > min">
+            and current_price >= #{min} and current_price &lt; #{max}
+        </if>
         order by create_at desc
     </select>
 </mapper>
