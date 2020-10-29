@@ -26,15 +26,14 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http.formLogin().loginPage("/sign/in")
+                .loginProcessingUrl("/sign/in")
+                .defaultSuccessUrl("/home")
+                .permitAll()
+                .and()
+                .authorizeRequests()
                 .antMatchers("/", "/sign/**", "/home").permitAll()
                 .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/sign/in")
-                .failureUrl("/sign/error").permitAll()
-                .and()
-                .logout().logoutSuccessUrl("/home")
                 .and()
                 .csrf().disable();
     }

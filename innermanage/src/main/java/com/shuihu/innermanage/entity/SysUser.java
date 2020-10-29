@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 public class SysUser {
     private Integer id;
-    private String user_name;
+    private String username;
     private String password;
     private String real_name;
     private Integer age;

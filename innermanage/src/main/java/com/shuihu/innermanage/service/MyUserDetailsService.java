@@ -41,6 +41,6 @@ public class MyUserDetailsService implements UserDetailsService {
                 authorities.add(new SimpleGrantedAuthority(permission.getCode()));
             }
         }
-        return new User(sysUser.getUser_name(), sysUser.getPassword(), authorities);
+        return new User(sysUser.getUsername(), sysUser.getPassword(), authorities);
     }
 }

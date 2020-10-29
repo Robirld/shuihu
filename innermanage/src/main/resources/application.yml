@@ -6,7 +6,8 @@ spring:
     url: jdbc:mysql://localhost:3306/shuihu?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: 12345687
+#    password: 12345687
+    password: 1993722libo
   thymeleaf:
     cache: false
     encoding: UTF-8
@@ -16,11 +17,6 @@ spring:
       date-time: yyyy/MM/dd HH:mm:ss
   application:
     name: inner-manage
-  security:
-    user:
-      name: admin
-      password: 123456
-      roles: admin,root
 
 mybatis:
   mapper-locations: classpath:/mapper/**.xml

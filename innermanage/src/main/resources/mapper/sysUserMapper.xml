@@ -3,11 +3,11 @@
 <mapper namespace="com.shuihu.innermanage.dao.SysUserDao">
     <insert id="addUser" parameterType="com.shuihu.innermanage.entity.SysUser" useGeneratedKeys="true" keyProperty="id">
         insert into
-        sys_user (user_name, password, real_name, age, phone, gender, address)
-        values (#{user_name}, #{password}, #{real_name}, #{age}, #{phone}, #{gender}, #{address})
+        sys_user (username, password, real_name, age, phone, gender, address)
+        values (#{username}, #{password}, #{real_name}, #{age}, #{phone}, #{gender}, #{address})
     </insert>
     <select id="getUserByUsername" parameterType="String" resultType="com.shuihu.innermanage.entity.SysUser">
-        select * from sys_user where user_name = #{username}
+        select * from sys_user where username = #{username}
     </select>
 
     <insert id="addRole" parameterType="com.shuihu.innermanage.entity.SysRole" useGeneratedKeys="true" keyProperty="id">

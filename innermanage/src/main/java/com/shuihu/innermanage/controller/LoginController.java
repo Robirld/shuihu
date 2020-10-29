@@ -24,6 +24,11 @@ public class LoginController {
         return "loginPage";
     }
 
+    @GetMapping("/home")
+    String home(SysUser user, Model model){
+        return "home";
+    }
+
     @GetMapping("/sign/error")
     String signError(Model model){
         model.addAttribute("msg", "error");
@@ -43,7 +48,7 @@ public class LoginController {
             model.addAttribute("error", e.getMessage());
             return "signUp";
         }
-        return "home";
+        return "loginPage";
     }
 
     @PreAuthorize("hasAuthority('sys:edit:role')")
