@@ -10,6 +10,7 @@
   <modules>
     <module>eurekaserver</module>
     <module>boss</module>
+      <module>innermanage</module>
   </modules>
 
   <name>shuihu-parent</name>

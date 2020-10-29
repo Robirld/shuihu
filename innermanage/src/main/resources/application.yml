@@ -1,0 +1,35 @@
+server:
+  port: 8003
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/shuihu?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 12345687
+  thymeleaf:
+    cache: false
+    encoding: UTF-8
+    mode: HTML5
+  mvc:
+    format:
+      date-time: yyyy/MM/dd HH:mm:ss
+  application:
+    name: inner-manage
+  security:
+    user:
+      name: admin
+      password: 123456
+      roles: admin,root
+
+mybatis:
+  mapper-locations: classpath:/mapper/**.xml
+
+eureka:
+  instance:
+    instance-id: inner-manage-8003
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8008/eureka/

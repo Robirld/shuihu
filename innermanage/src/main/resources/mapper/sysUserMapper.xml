@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shuihu.innermanage.dao.SysUserDao">
+    <insert id="addUser" parameterType="com.shuihu.innermanage.entity.SysUser" useGeneratedKeys="true" keyProperty="id">
+        insert into
+        sys_user (user_name, password, real_name, age, phone, gender, address)
+        values (#{user_name}, #{password}, #{real_name}, #{age}, #{phone}, #{gender}, #{address})
+    </insert>
+    <select id="getUserByUsername" parameterType="String" resultType="com.shuihu.innermanage.entity.SysUser">
+        select * from sys_user where user_name = #{username}
+    </select>
+
+    <insert id="addRole" parameterType="com.shuihu.innermanage.entity.SysRole" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_role (role_name) values (#{role_name})
+    </insert>
+
+    <select id="getRoleByUserId" parameterType="Integer" resultType="com.shuihu.innermanage.entity.SysRole">
+        select *
+        from sys_role
+        where id in (
+        select role_id
+        from sys_user_role
+        where user_id = #{id}
+        )
+    </select>
+
+    <insert id="addPermission" parameterType="com.shuihu.innermanage.entity.SysPermission" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_permission
+        (code, name, url, description)
+        values
+        (#{code}, #{name}, #{url}, #{description})
+    </insert>
+
+    <select id="getPermissionByRoleId" parameterType="Integer" resultType="com.shuihu.innermanage.entity.SysPermission">
+        select *
+        from sys_permission
+        where id in (
+        select permission_id
+        from sys_role_permission
+        where role_id = #{id}
+        )
+    </select>
+
+    <insert id="addRole2User">
+        insert into sys_user_role
+        (user_id, role_id)
+        values
+        <foreach collection="roleIds" separator="," item="roleId" open=" " close=" " index="i">
+            (#{userId}, #{roleId})
+        </foreach>
+    </insert>
+
+    <insert id="addPermission2Role">
+        insert into sys_role_permission
+        (role_id, permission_id)
+        values
+        <foreach collection="permissionIds" separator="," item="permissionId" open=" " close=" " index="i">
+            (#{roleId}, #{permissionId})
+        </foreach>
+    </insert>
+
+    <select id="getAllRole" resultType="com.shuihu.innermanage.entity.SysRole">
+        select * from sys_role
+    </select>
+
+    <select id="getAllPermission" resultType="com.shuihu.innermanage.entity.SysPermission">
+        select * from sys_permission
+    </select>
+</mapper>

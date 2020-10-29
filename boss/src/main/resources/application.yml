@@ -13,8 +13,6 @@ eureka:
 
 spring:
   mvc:
-    view:
-      suffix: .html
     format:
       date: yyyy/MM/dd HH:mm:ss
   datasource:
