@@ -10,9 +10,15 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +59,18 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                     writer.flush();
                     writer.close();
                 })
-                .permitAll()
+                .and()
+                .logout()
+                .logoutSuccessHandler((request, response, auth) -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("msg", "注销成功");
+                    map.put("code", 200);
+                    response.setContentType("application/json;charset=UTF-8");
+                    PrintWriter writer = response.getWriter();
+                    writer.write(JSONObject.toJSONString(map));
+                    writer.flush();
+                    writer.close();
+                })
                 .and()
                 .authorizeRequests()
                 .antMatchers("/", "/sign/**", "/home").permitAll()
